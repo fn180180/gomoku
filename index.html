@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>決戰！五子棋</title>
+<style>
+#header {
+text-align: center;
+font-size: 32px;
+color: #b22222;
+margin: 20px 0;
+text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+body {
+display: flex;
+flex-direction: column;
+align-items: center;
+font-family: "Microsoft JhengHei", Arial, sans-serif;
+background: #f0f0f0;
+margin: 0;
+padding: 10px;
+}
+#board {
+border-collapse: collapse;
+background: #e6a23c;
+margin: 10px auto;
+box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+td {
+width: 35px;
+height: 35px;
+border: 1px solid #8b4513;
+text-align: center;
+font-size: 14px;
+font-weight: bold;
+color: #333;
+position: relative;
+cursor: pointer;
+}
+.black {
+position: relative;
+}
+.black::after {
+content: '';
+width: 26px;
+height: 26px;
+border-radius: 50%;
+background: #000;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+z-index: 2;
+}
+.white {
+position: relative;
+}
+.white::after {
+content: '';
+width: 26px;
+height: 26px;
+border-radius: 50%;
+background: #fff;
+box-shadow: 0 0 5px rgba(0,0,0,0.3);
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+z-index: 2;
+}
+.move-number {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+font-size: 10px;
+z-index: 3;
+}
+.black .move-number { color: white; }
+.white .move-number { color: black; }
+.mark::before {
+content: '';
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: #ff0000;
+position: absolute;
+top: 3px;
+right: 3px;
+z-index: 3;
+box-shadow: 0 0 3px white;
+border: 2px solid white;
+}
+.preview::after {
+content: '';
+width: 26px;
+height: 26px;
+border: 3px solid rgba(33, 150, 243, 0.8);
+border-radius: 50%;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+z-index: 1;
+animation: pulse 1.5s infinite;
+box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
+}
+@keyframes pulse {
+0% {
+transform: translate(-50%, -50%) scale(0.9);
+opacity: 0.8;
+}
+50% {
+transform: translate(-50%, -50%) scale(1.15);
+opacity: 1;
+}
+100% {
+transform: translate(-50%, -50%) scale(0.9);
+opacity: 0.8;
+}
+}
+#status {
+font-size: 24px;
+margin: 10px;
+color: #333;
+}
+#controls {
+display: flex;
+gap: 15px;
+margin-bottom: 15px;
+flex-wrap: wrap;
+justify-content: center;
+}
+#controls button {
+padding: 12px 24px;
+font-size: 18px;
+cursor: pointer;
+color: white;
+border: none;
+border-radius: 6px;
+transition: opacity 0.3s;
+}
+#controls button.undo {
+background: #ff4444;
+}
+#controls button.reset {
+background: #2196F3;
+}
+#markToggle {
+background: #ff0000;
+}
+/* 新增的連線高亮和煙火效果樣式 */
+.winning-stone::after {
+box-shadow: 0 0 10px 5px gold !important;
+animation: pulse-win 1s infinite !important;
+}
+@keyframes pulse-win {
+0% {
+transform: translate(-50%, -50%) scale(0.9);
+box-shadow: 0 0 10px 5px gold;
+}
+50% {
+transform: translate(-50%, -50%) scale(1.1);
+box-shadow: 0 0 15px 8px gold;
+}
+100% {
+transform: translate(-50%, -50%) scale(0.9);
+box-shadow: 0 0 10px 5px gold;
+}
+}
+.firecracker-container {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+z-index: 1000;
+}
+.firecracker-particle {
+position: absolute;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+animation: firecracker 1.5s ease-out forwards;
+}
+@keyframes firecracker {
+0% {
+transform: translate(0, 0) scale(0);
+opacity: 1;
+}
+100% {
+transform: translate(var(--x), var(--y)) scale(1.5);
+opacity: 0;
+}
+}
+button:hover {
+opacity: 0.8;
+}
+@media (max-width: 600px) {
+td {
+width: 25px;
+height: 25px;
+font-size: 12px;
+}
+.black::after, .white::after {
+width: 18px;
+height: 18px;
+}
+.preview::after {
+width: 18px;
+height: 18px;
+border-width: 2px;
+box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
+}
+.mark::before {
+width: 6px;
+height: 6px;
+top: 2px;
+right: 2px;
+}
+.move-number {
+font-size: 8px;
+}
+#status {
+font-size: 20px;
+}
+button {
+padding: 10px 20px;
+font-size: 16px;
+}
+}
+</style>
+</head>
+<body>
+<h1 id="header">決戰！明智五子棋！</h1>
+<div id="status">黑棋回合</div>
+<div id="controls">
+<button class="undo">悔棋</button>
+<button class="reset">新遊戲</button>
+<button id="markToggle">開啟註記</button>
+</div>
+<table id="board"></table>
+
+<!-- 载入所有模块 -->
+<script src="GameBoard.js"></script>
+<script src="GameLogic.js"></script>
+<script src="MoveHistory.js"></script>
+<script src="AudioManager.js"></script>
+<script src="UIManager.js"></script>
+<script src="InteractionManager.js"></script>
+<script src="GameController.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
