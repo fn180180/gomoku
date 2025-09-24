@@ -258,16 +258,19 @@ font-size: 16px;
 
 <script>
 setTimeout(() => {
-    console.log('DOM elements check:');
-    console.log('board:', document.getElementById('board'));
-    console.log('status:', document.getElementById('status'));
-    console.log('controls:', document.getElementById('controls'));
-    console.log('markToggle:', document.getElementById('markToggle'));
+    let result = '';
+    result += 'DOM elements:\n';
+    result += 'board: ' + (document.getElementById('board') ? 'OK' : 'MISSING') + '\n';
+    result += 'status: ' + (document.getElementById('status') ? 'OK' : 'MISSING') + '\n';
+    result += 'controls: ' + (document.getElementById('controls') ? 'OK' : 'MISSING') + '\n';
+    result += 'markToggle: ' + (document.getElementById('markToggle') ? 'OK' : 'MISSING') + '\n\n';
     
-    console.log('Classes available:');
-    console.log('GameBoard:', typeof GameBoard);
-    console.log('GameLogic:', typeof GameLogic);
-    console.log('GameController:', typeof GameController);
-    console.log('GomokuApp:', typeof GomokuApp);
+    result += 'Classes:\n';
+    result += 'GameBoard: ' + (typeof GameBoard !== 'undefined' ? 'OK' : 'MISSING') + '\n';
+    result += 'GameLogic: ' + (typeof GameLogic !== 'undefined' ? 'OK' : 'MISSING') + '\n';
+    result += 'GameController: ' + (typeof GameController !== 'undefined' ? 'OK' : 'MISSING') + '\n';
+    result += 'GomokuApp: ' + (typeof GomokuApp !== 'undefined' ? 'OK' : 'MISSING') + '\n';
+    
+    alert(result);
 }, 1000);
-      </script>
+</script>
