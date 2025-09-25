@@ -255,3 +255,22 @@ font-size: 16px;
 
 </body>
 </html>
+
+<script>
+setTimeout(() => {
+    try {
+        console.log('Testing GameController...');
+        const testConfig = { boardSize: 15, boardContainerId: 'board' };
+        const controller = new GameController(testConfig);
+        console.log('GameController created successfully');
+        
+        controller.init().then(result => {
+            console.log('GameController init result:', result);
+        }).catch(error => {
+            console.log('GameController init error:', error.message);
+        });
+    } catch (error) {
+        console.log('GameController constructor error:', error.message);
+    }
+}, 2000);
+</script>
