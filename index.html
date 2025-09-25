@@ -255,28 +255,3 @@ font-size: 16px;
 
 </body>
 </html>
-
-<script>
-setTimeout(() => {
-    // 检查全局变量
-    let result = '';
-    result += 'Global variables:\n';
-    result += 'gomokuApp: ' + (typeof gomokuApp !== 'undefined' && gomokuApp !== null ? 'EXISTS' : 'NULL') + '\n';
-    result += 'startGomokuGame: ' + (typeof startGomokuGame !== 'undefined' ? 'EXISTS' : 'MISSING') + '\n\n';
-    
-    // 尝试手动启动游戏
-    try {
-        if (typeof startGomokuGame !== 'undefined') {
-            result += 'Trying to start game...\n';
-            startGomokuGame();
-            result += 'Game started successfully!\n';
-        } else {
-            result += 'startGomokuGame function not found!\n';
-        }
-    } catch (error) {
-        result += 'Error starting game: ' + error.message + '\n';
-    }
-    
-    alert(result);
-}, 2000);
-</script>
