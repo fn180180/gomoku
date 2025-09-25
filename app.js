@@ -555,15 +555,11 @@ function stopGomokuGame() {
     }
 }
 
-// DOM加载完成后自动启动
+// 确保所有模块加载完成后再启动
 if (typeof window !== 'undefined') {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            startGomokuGame();
-        });
-    } else {
+    window.addEventListener('load', () => {
         startGomokuGame();
-    }
+    });
 }
 
 // 导出模块
